@@ -135,15 +135,11 @@ class Garmin extends Server
         $query = http_build_query($params);
         $query = '/activities?' . $query;
         $headers = $this->getHeaders($tokenCredentials, 'GET', self::USER_API_URL . $query);
-       
-        try 
-        {
+        try {
             $response = $client->get(self::USER_API_URL . $query, [
                 'headers' => $headers
             ]);
-        } 
-        catch (BadResponseException $e) 
-        {
+        } catch (BadResponseException $e) {
             $response = $e->getResponse();
             $body = $response->getBody();
             $statusCode = $response->getStatusCode();
@@ -152,7 +148,6 @@ class Garmin extends Server
                 "Received error [$body] with status code [$statusCode] when retrieving activity summary."
             );
         }
-
         return $response->getBody()->getContents();
     }
 
