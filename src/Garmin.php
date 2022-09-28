@@ -45,6 +45,16 @@ class Garmin extends Server
     }
 
     /**
+     * Get the URL retrieving user details.
+     *
+     * @return string
+     */
+    public function urlUserDetails()
+    {
+        return self::USER_API_URL . "user/id";
+    }    
+
+    /**
      * Get the authorization URL by passing in the temporary credentials
      * identifier or an object instance.
      *
@@ -129,7 +139,7 @@ class Garmin extends Server
         return $this->normalizeProtocolParameters($parameters);
     }
 
-    public function getActivitySummary(TokenCredentials $tokenCredentials, $params)
+   /* public function getActivitySummary(TokenCredentials $tokenCredentials, $params)
     {
         $client = $this->createHttpClient();
         $query = http_build_query($params);
@@ -149,11 +159,7 @@ class Garmin extends Server
             );
         }
         return $response->getBody()->getContents();
-    }
-
-    public function urlUserDetails()
-    {
-    }
+    }*/
 
     public function userDetails($data, TokenCredentials $tokenCredentials)
     {
@@ -161,6 +167,7 @@ class Garmin extends Server
 
     public function userUid($data, TokenCredentials $tokenCredentials)
     {
+        pre($data); die();
     }
 
     public function userEmail($data, TokenCredentials $tokenCredentials)
