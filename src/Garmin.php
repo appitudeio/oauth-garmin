@@ -44,6 +44,32 @@ class Garmin extends Server
     {
         return self::USER_API_URL . "user/id";
     }
+    
+    /**
+     * Get the authorization URL by passing in the temporary credentials
+     * identifier or an object instance.
+     *
+     * @param TemporaryCredentials|string
+     *
+     * @return string
+     */
+    public function getAuthorizationUrl($temporaryIdentifier, array $options = [])
+    {
+        /**
+         * Somebody can pass through an instance of temporary
+         * credentials and we'll extract the identifier from there.
+         */
+        if ($temporaryIdentifier instanceof TemporaryCredentials) {
+            $temporaryIdentifier = $temporaryIdentifier->getIdentifier();
+        }
+        //$parameters = array('oauth_token' => $temporaryIdentifier, 'oauth_callback' => 'http://70.38.37.105:1225');
+
+        $url = $this->urlAuthorization();
+        //$queryString = http_build_query($parameters);
+        $queryString = "oauth_token=" . $temporaryIdentifier . "&oauth_callback=" . $this->clientCredentials->getCallbackUri();
+
+        return $this->buildUrl($url, $queryString);
+    }
 
     /**
      * Retrieves token credentials by passing in the temporary credentials,
@@ -80,6 +106,28 @@ class Garmin extends Server
             return $this->handleTokenCredentialsBadResponse($e);
         }
         return $this->createTokenCredentials((string)$response->getBody());
+    }
+
+    protected function protocolHeader($method, $uri, CredentialsInterface $credentials, array $bodyParameters = array())
+    {
+        $parameters = array_merge(
+            $this->baseProtocolParameters(),
+            $this->additionalProtocolParameters(),
+            array(
+                'oauth_token' => $credentials->getIdentifier(),
+
+            ),
+            $bodyParameters
+        );
+        $this->signature->setCredentials($credentials);
+
+        $parameters['oauth_signature'] = $this->signature->sign(
+            $uri,
+            array_merge($parameters, $bodyParameters),
+            $method
+        );
+
+        return $this->normalizeProtocolParameters($parameters);
     }    
 
     public function userDetails($data, TokenCredentials $tokenCredentials)
