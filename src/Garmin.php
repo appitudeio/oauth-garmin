@@ -10,9 +10,9 @@ use League\OAuth1\Client\Credentials\CredentialsInterface;
 
 class Garmin extends Server
 {
-
-    const API_URL = "https://connectapitest.garmin.com/";
-    const USER_API_URL = "http://gcsapitest.garmin.com/wellness-api/rest/";
+    const API_URL       = "https://connectapi.garmin.com/";
+    const AUTH_URL      = "https://connect.garmin.com/";
+    const USER_API_URL  = "https://healthapi.garmin.com/wellness-api/rest/";
 
     /**
      * Get the URL for retrieving temporary credentials.
@@ -21,7 +21,7 @@ class Garmin extends Server
      */
     public function urlTemporaryCredentials()
     {
-        return self::API_URL . 'oauth-service-1.0/oauth/request_token';
+        return self::API_URL . 'oauth-service/oauth/request_token';
     }
 
     /**
@@ -31,7 +31,7 @@ class Garmin extends Server
      */
     public function urlAuthorization()
     {
-        return 'http://connecttest.garmin.com/oauthConfirm';
+        return $this->AUTH_URL . 'oauthConfirm';
     }
 
     /**
@@ -54,8 +54,10 @@ class Garmin extends Server
      */
     public function getAuthorizationUrl($temporaryIdentifier, array $options = [])
     {
-        // Somebody can pass through an instance of temporary
-        // credentials and we'll extract the identifier from there.
+        /**
+         * Somebody can pass through an instance of temporary
+         * credentials and we'll extract the identifier from there.
+         */
         if ($temporaryIdentifier instanceof TemporaryCredentials) {
             $temporaryIdentifier = $temporaryIdentifier->getIdentifier();
         }
@@ -133,11 +135,15 @@ class Garmin extends Server
         $query = http_build_query($params);
         $query = '/activities?' . $query;
         $headers = $this->getHeaders($tokenCredentials, 'GET', self::USER_API_URL . $query);
-        try {
+       
+        try 
+        {
             $response = $client->get(self::USER_API_URL . $query, [
                 'headers' => $headers
             ]);
-        } catch (BadResponseException $e) {
+        } 
+        catch (BadResponseException $e) 
+        {
             $response = $e->getResponse();
             $body = $response->getBody();
             $statusCode = $response->getStatusCode();
@@ -146,6 +152,7 @@ class Garmin extends Server
                 "Received error [$body] with status code [$statusCode] when retrieving activity summary."
             );
         }
+
         return $response->getBody()->getContents();
     }
 
