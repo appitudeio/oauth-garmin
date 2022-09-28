@@ -52,12 +52,12 @@ class Garmin extends Server
      *
      * @return string
      */
-    public function getAuthorizationUrl($temporaryIdentifier, array $options = [])
+    /*public function getAuthorizationUrl($temporaryIdentifier, array $options = [])
     {
         /**
          * Somebody can pass through an instance of temporary
          * credentials and we'll extract the identifier from there.
-         */
+         *
         if ($temporaryIdentifier instanceof TemporaryCredentials) {
             $temporaryIdentifier = $temporaryIdentifier->getIdentifier();
         }
@@ -68,7 +68,7 @@ class Garmin extends Server
         $queryString = "oauth_token=" . $temporaryIdentifier . "&oauth_callback=" . $this->clientCredentials->getCallbackUri();
 
         return $this->buildUrl($url, $queryString);
-    }
+    }*/
 
     /**
      * Retrieves token credentials by passing in the temporary credentials,
