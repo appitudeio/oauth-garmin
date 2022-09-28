@@ -31,7 +31,7 @@ class Garmin extends Server
      */
     public function urlAuthorization()
     {
-        return $this->AUTH_URL . 'oauthConfirm';
+        return self::AUTH_URL . 'oauthConfirm';
     }
 
     /**
