@@ -54,44 +54,7 @@ class Garmin extends Server
         return self::USER_API_URL . "user/id";
     }    
 
-    /**
-     * Retrieves token credentials by passing in the temporary credentials,
-     * the temporary credentials identifier as passed back by the server
-     * and finally the verifier code.
-     *
-     * @param TemporaryCredentials $temporaryCredentials
-     * @param string $temporaryIdentifier
-     * @param string $verifier
-     *
-     * @return TokenCredentials
-     */
-    /*public function getTokenCredentials(TemporaryCredentials $temporaryCredentials, $temporaryIdentifier, $verifier)
-    {
-        if ($temporaryIdentifier !== $temporaryCredentials->getIdentifier()) {
-            throw new \InvalidArgumentException(
-                'Temporary identifier passed back by server does not match that of stored temporary credentials.
-                Potential man-in-the-middle.'
-            );
-        }
-
-        $uri = $this->urlTokenCredentials();
-        $bodyParameters = array('oauth_verifier' => $verifier);
-
-        $client = $this->createHttpClient();
-
-        $headers = $this->getHeaders($temporaryCredentials, 'POST', $uri, $bodyParameters);
-        try {
-            $response = $client->post($uri, [
-                'headers' => $headers,
-                'form_params' => $bodyParameters
-            ]);
-        } catch (BadResponseException $e) {
-            return $this->handleTokenCredentialsBadResponse($e);
-        }
-        return $this->createTokenCredentials((string)$response->getBody());
-    }*/
-
-    protected function protocolHeader($method, $uri, CredentialsInterface $credentials, array $bodyParameters = array())
+   /* protected function protocolHeader($method, $uri, CredentialsInterface $credentials, array $bodyParameters = array())
     {
         $parameters = array_merge(
             $this->baseProtocolParameters(),
@@ -111,7 +74,7 @@ class Garmin extends Server
         );
 
         return $this->normalizeProtocolParameters($parameters);
-    }
+    }*/
 
    /* public function getActivitySummary(TokenCredentials $tokenCredentials, $params)
     {
